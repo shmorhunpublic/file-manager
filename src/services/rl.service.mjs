@@ -1,5 +1,5 @@
 import readline from "readline";
-import { messages } from "../utils/data/messages/messages.mjs";
+import { farewellUser, greetUser } from "../utils/helpers/user.helpers.mjs";
 
 export class ReadlineService {
   constructor(username) {
@@ -16,6 +16,7 @@ export class ReadlineService {
     this.rl.prompt();
     this.rl.on("line", (line) => this.handleLineInput(line));
     this.rl.on("close", () => this.closeReadline());
+    greetUser(this.username);
   }
 
   handleLineInput(line) {
@@ -30,7 +31,7 @@ export class ReadlineService {
   }
 
   closeReadline() {
-    console.log(messages.user.farewell(this.username));
+    farewellUser(this.username);
     this.rl.close();
     process.exit(0);
   }

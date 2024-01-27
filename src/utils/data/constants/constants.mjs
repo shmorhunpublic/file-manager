@@ -1,6 +1,5 @@
 export const ERRORS = {
   ENOENT: "ENOENT", // "Error NO ENTry" or "Error No Entity"
-  AUTH: "",
 };
 
 export const PATHS = {
