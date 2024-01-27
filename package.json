@@ -1,0 +1,22 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "file manager application",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmorhunpublic/file-manager"
+  },
+  "keywords": [
+    "file-manager",
+    "nodejs",
+    "cli"
+  ],
+  "author": "Andrew Shmorhun",
+  "license": "ISC"
+}
