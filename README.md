@@ -1,2 +1,3 @@
-# file-manager
-RS School/file manager
+# File Manager
+
+## Made by Andrew Shmorhun
