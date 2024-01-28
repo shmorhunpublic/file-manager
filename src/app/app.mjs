@@ -12,7 +12,7 @@ export class App {
   run() {
     try {
       this.authService.validation(this.userService.username);
-      this.readlineService.initReadline();
+      this.readlineService.init();
     } catch (error) {
       console.error(error.message);
       process.exit(1);
