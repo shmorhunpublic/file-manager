@@ -1,22 +1,26 @@
-import { AuthService } from "../services/auth.service.mjs";
 import { ReadlineService } from "../services/rl.service.mjs";
-import { messages } from "../utils/data/messages/messages.mjs";
-import { initUser } from "../utils/helpers/user.helpers.mjs";
+import { UserService } from "../services/user.service.mjs";
+import { AuthService } from "../services/auth.service.mjs";
 
 export class App {
   constructor() {
-    this.user = initUser();
+    this.userService = new UserService();
     this.authService = new AuthService();
-    this.readlineService = new ReadlineService(this.user);
+    this.readlineService = new ReadlineService(this.userService.username);
   }
 
   run() {
     try {
-      this.authService.userValidation(this.user);
+      this.authService.validation(this.userService.username);
       this.readlineService.initReadline();
     } catch (error) {
-      console.error(`${messages.errors.auth.failed} ${error.message}`);
+      console.error(error.message);
       process.exit(1);
     }
+  }
+
+  close() {
+    this.userService.farewell();
+    process.exit(0);
   }
 }

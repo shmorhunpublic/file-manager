@@ -1,13 +1,12 @@
 import { messages } from "../utils/data/messages/messages.mjs";
-import { isInvalidUserName } from "../utils/helpers/auth.helpers.mjs";
 
 export class AuthService {
   constructor() {}
 
-  userValidation(username) {
+  validation(username) {
     // Simple validation: check if the username is not empty
 
-    if (isInvalidUserName(username)) {
+    if (!username || typeof username !== "string" || username.trim() === "") {
       throw new Error(messages.errors.auth.username);
     }
     // More complex validation logic can be added here

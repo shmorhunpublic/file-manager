@@ -1,7 +1,7 @@
 export const messages = {
   errors: {
     auth: {
-      username: "Invalid or missing username",
+      username: "Invalid or missing username!",
       failed: "Authentication failed:",
     },
     fs: "FS operation failed",

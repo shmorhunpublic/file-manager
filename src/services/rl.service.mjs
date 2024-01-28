@@ -1,9 +1,9 @@
 import readline from "readline";
-import { farewellUser, greetUser } from "../utils/helpers/user.helpers.mjs";
+import { UserService } from "./user.service.mjs";
 
 export class ReadlineService {
-  constructor(username) {
-    this.username = username;
+  constructor(userService) {
+    this.userService = new UserService();
 
     this.rl = readline.createInterface({
       input: process.stdin,
@@ -16,7 +16,9 @@ export class ReadlineService {
     this.rl.prompt();
     this.rl.on("line", (line) => this.handleLineInput(line));
     this.rl.on("close", () => this.closeReadline());
-    greetUser(this.username);
+
+    // Use UserService to greet the user
+    this.userService.greet();
   }
 
   handleLineInput(line) {
@@ -25,13 +27,14 @@ export class ReadlineService {
       this.closeReadline();
     }
 
-    // Add more command handling logic here
+    // Command handling logic here
 
     this.rl.prompt();
   }
 
   closeReadline() {
-    farewellUser(this.username);
+    // Use UserService to farewell the user
+    this.userService.farewell();
     this.rl.close();
     process.exit(0);
   }
