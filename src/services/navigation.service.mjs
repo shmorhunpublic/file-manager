@@ -1,4 +1,4 @@
-import { changeDirectory } from "../modules/fs/cd.mjs";
+import { cd } from "../modules/cd/cd.mjs";
 import fs from "fs";
 import path from "path";
 
@@ -9,7 +9,7 @@ export class NavigationService {
 
   cd(dir) {
     try {
-      this.dir = changeDirectory(this.location(), dir);
+      this.dir = cd(this.location(), dir);
     } catch (error) {
       console.error(`cd command failed: ${error.message}`);
     }
