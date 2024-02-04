@@ -3,6 +3,7 @@ import { UserService } from "./user.service.mjs";
 import { NavigationService } from "./navigation.service.mjs";
 import { FsService } from "./fs.services.mjs";
 import { OsService } from "./os.service.mjs";
+import { HashService } from "./hash.service.mjs";
 
 export class ReadlineService {
   constructor() {
@@ -10,6 +11,8 @@ export class ReadlineService {
     this.navigationService = new NavigationService();
     this.fsService = new FsService(this.navigationService);
     this.osService = new OsService();
+    this.hashService = new HashService(this.navigationService);
+
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -61,7 +64,7 @@ export class ReadlineService {
 
       case "ls":
         try {
-          this.navigationService.ls(); //
+          this.navigationService.ls();
         } catch (error) {
           console.error(`Command error "ls": ${error.message}`);
         }
@@ -106,6 +109,13 @@ export class ReadlineService {
               console.log("Unknown OS command");
               break;
           }
+        }
+        break;
+      case "hash":
+        if (args.length) {
+          this.hashService.hash(args.join(" "));
+        } else {
+          console.log("Please specify the file path.");
         }
         break;
       default:

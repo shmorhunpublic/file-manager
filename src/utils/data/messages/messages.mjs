@@ -33,28 +33,3 @@ export const messages = {
       `${inputFile} has been decompressed to to ${outputFile}`,
   },
 };
-
-export const contents = {
-  fs: {
-    create: { fileName: "fresh.txt", content: "I am fresh and young" },
-    rename: {
-      old: "wrongFilename.txt",
-      new: "properFilename.md",
-    },
-    delete: "fileToRemove.txt",
-    list: "files",
-    read: "fileToRead.txt",
-  },
-  hash: "fileToCalculateHashFor.txt",
-  stream: {
-    read: "fileToRead.txt",
-    write: {
-      start: "Start typing to write to the file. Press Ctrl+C to end.",
-      fileName: "fileToWrite.txt",
-    },
-  },
-  zip: {
-    gz: "archive.gz",
-    txt: "fileToCompress.txt",
-  },
-};
