@@ -1,25 +1,37 @@
-import { cd } from "../modules/cd/cd.mjs";
-import fs from "fs";
 import path from "path";
+import fs from "fs";
+import os from "os";
 
 export class NavigationService {
   constructor() {
+    this.homedir = os.homedir();
     this.dir = process.cwd();
   }
 
-  cd(dir) {
+  init() {
     try {
-      this.dir = cd(this.location(), dir);
+      this.cd(this.homedir);
+      console.log(`Initial directory: ${this.homedir}`);
     } catch (error) {
-      console.error(`cd command failed: ${error.message}`);
+      console.error(`Init directory error: ${error.message}`);
     }
+  }
+
+  cd(targetDir) {
+    const newPath = path.resolve(this.dir, targetDir);
+    if (!fs.existsSync(newPath)) {
+      throw new Error("Directory does not exist");
+    }
+    if (!fs.statSync(newPath).isDirectory()) {
+      throw new Error("Path is not a directory");
+    }
+    this.dir = newPath;
   }
 
   up() {
     const parentDir = path.dirname(this.dir);
     if (parentDir !== this.dir) {
       this.dir = parentDir;
-      this.cd(parentDir);
     } else {
       console.log("Already at the root directory");
     }
@@ -27,15 +39,17 @@ export class NavigationService {
 
   ls() {
     const contents = fs.readdirSync(this.dir, { withFileTypes: true });
-    return contents
-      .map((dirent, index) => ({
-        name: dirent.name,
-        type: dirent.isDirectory() ? "folder" : "file",
-      }))
-      .sort((a, b) => {
-        if (a.type === b.type) return a.name.localeCompare(b.name);
-        return a.type === "folder" ? -1 : 1;
-      });
+    return console.table(
+      contents
+        .map((dirent, index) => ({
+          name: dirent.name,
+          type: dirent.isDirectory() ? "folder" : "file",
+        }))
+        .sort((a, b) => {
+          if (a.type === b.type) return a.name.localeCompare(b.name);
+          return a.type === "folder" ? -1 : 1;
+        })
+    );
   }
 
   location() {

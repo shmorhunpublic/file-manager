@@ -1,6 +1,7 @@
 import { ReadlineService } from "../services/rl.service.mjs";
 import { UserService } from "../services/user.service.mjs";
 import { AuthService } from "../services/auth.service.mjs";
+import { NavigationService } from "../services/navigation.service.mjs";
 
 export class App {
   constructor() {

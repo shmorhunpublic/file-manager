@@ -1,6 +1,5 @@
 import readline from "readline";
 import { UserService } from "./user.service.mjs";
-import os from "os";
 import { NavigationService } from "./navigation.service.mjs";
 
 export class ReadlineService {
@@ -17,64 +16,58 @@ export class ReadlineService {
   init() {
     this.rl.setPrompt("");
     this.rl.prompt();
-    this.rl.on("line", (line) => this.handle(line));
     this.rl.on("close", () => this.close());
 
-    // Use UserService to greet the user
     this.userService.greet();
-
-    const startDirectory = os.homedir(); // Get the home directory
-    this.navigationService.cd(startDirectory);
-
-    console.log(`Start Directory: ${startDirectory}`);
-
+    this.navigationService.init();
     this.rl.on("line", async (line) => {
       const [command, ...args] = line.trim().split(" ");
       await this.exec(command, args);
-      console.log(`Current directory: ${this.userService.location()}`);
+      console.log(`Current directory: ${this.navigationService.location()}`);
       this.rl.prompt();
     });
-
-    // this.rl.on("line", (line) => {
-    //   const [command, ...args] = line.trim().split(" ");
-    //   try {
-    //     const navigationHandler = commands[command];
-    //     if (navigationHandler) {
-    //       navigationHandler(this.navigationService, args);
-    //     } else {
-    //       console.log("Unknown command");
-    //     }
-    //   } catch (error) {
-    //     console.error(error.message);
-    //   }
-    //   console.log(`Current directory: ${this.navigationService.location()}`);
-    //   this.rl.prompt();
-    // });
   }
 
   async exec(command, args) {
-    try {
-      const commandFunction = (await import(`../modules/${command}.mjs`))
-        .default;
-      await commandFunction(this, args);
-    } catch (error) {
-      console.error(`Command execution failed: ${error.message}`);
+    switch (command) {
+      case "cd":
+        try {
+          const targetDir = args.join(" ");
+          this.navigationService.cd(targetDir);
+          console.log(
+            `Directory changed to: ${this.navigationService.location()}`
+          );
+        } catch (error) {
+          console.error(`Command error 'cd': ${error.message}`);
+        }
+        break;
+
+      case "up":
+        try {
+          this.navigationService.up();
+          console.log(
+            `Current directory: ${this.navigationService.location()}`
+          );
+        } catch (error) {
+          console.error(`Command error 'up': ${error.message}`);
+        }
+        break;
+
+      case "ls":
+        try {
+          this.navigationService.ls(); //
+        } catch (error) {
+          console.error(`Command error "ls": ${error.message}`);
+        }
+        break;
+
+      default:
+        console.log("Command is undefined");
+        break;
     }
   }
 
-  // handle(line) {
-  //   // Example: handle '.exit' command
-  //   if (line.trim() === ".exit") {
-  //     this.close();
-  //   }
-
-  //   // Command handling logic here
-
-  //   this.rl.prompt();
-  // }
-
   close() {
-    // Use UserService to farewell the user
     this.userService.farewell();
     this.rl.close();
     process.exit(0);
