@@ -2,12 +2,14 @@ import readline from "readline";
 import { UserService } from "./user.service.mjs";
 import { NavigationService } from "./navigation.service.mjs";
 import { FsService } from "./fs.services.mjs";
+import { OsService } from "./os.service.mjs";
 
 export class ReadlineService {
   constructor() {
     this.userService = new UserService();
     this.navigationService = new NavigationService();
     this.fsService = new FsService(this.navigationService);
+    this.osService = new OsService();
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -31,6 +33,9 @@ export class ReadlineService {
 
   async exec(command, args) {
     switch (command) {
+      case ".exit":
+        this.exit();
+        break;
       case "cd":
         try {
           const targetDir = args.join(" ");
@@ -79,15 +84,43 @@ export class ReadlineService {
       case "rm":
         await this.fsService.rm(args.join(" "));
         break;
+      case "os":
+        if (args.length) {
+          switch (args[0]) {
+            case "--EOL":
+              this.osService.eol();
+              break;
+            case "--cpus":
+              this.osService.cpus();
+              break;
+            case "--homedir":
+              this.osService.homedir();
+              break;
+            case "--username":
+              this.osService.username();
+              break;
+            case "--architecture":
+              this.osService.architecture();
+              break;
+            default:
+              console.log("Unknown OS command");
+              break;
+          }
+        }
+        break;
       default:
         console.log(`Command '${command}' is undefined`);
         break;
     }
   }
 
-  close() {
-    this.userService.farewell();
+  exit() {
     this.rl.close();
     process.exit(0);
+  }
+
+  close() {
+    this.userService.farewell();
+    this.exit();
   }
 }
