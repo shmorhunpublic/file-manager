@@ -1,4 +1,4 @@
-import { messages } from "../utils/data/messages/messages.mjs";
+import { messages } from "../utils/messages/messages.mjs";
 
 export class UserService {
   constructor() {
